@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <title>LungCare+ Dodaj Pacjenta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f9fafb;
+            --bg-sidebar: white;
+            --bg-card: white;
+            --text-main: #1f2937;
+            --text-sec: #4b5563;
+            --border: #e5e7eb;
+            --input-bg: white;
+            --header-bg: white;
+        }
+
+        body.dark-mode {
+            --bg-body: #111827;
+            --bg-sidebar: #1f2937;
+            --bg-card: #1f2937;
+            --text-main: #f3f4f6;
+            --text-sec: #9ca3af;
+            --border: #374151;
+            --input-bg: #374151;
+            --header-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            animation: wejscie 0.4s ease-out;
+        }
+
+        @keyframes wejscie {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 72px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            height: 100vh;
+            transition: width 0.3s ease-in-out;
+            z-index: 50;
+            overflow: hidden;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.02);
+        }
+
+            .sidebar:hover {
+                width: 220px;
+            }
+
+        .sidebar-header {
+            height: 68px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .logo-tekst {
+            font-size: 24px;
+            color: #007AFF;
+            font-weight: 800;
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover .logo-tekst {
+            opacity: 1;
+            width: auto;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-sec);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .toggle-btn:hover {
+                color: #2563eb;
+            }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            color: var(--text-sec);
+        }
+
+            .nav-item .material-symbols-outlined {
+                width: 20px;
+                height: 20px;
+                font-size: 20px;
+                flex-shrink: 0;
+                margin-right: 12px;
+            }
+
+        .nav-text {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover .nav-text {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .nav-item.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .nav-item:not(.active):hover {
+            background-color: #f3f4f6;
+        }
+
+        body.dark-mode .nav-item:not(.active):hover {
+            background-color: #374151;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding: 12px;
+            background-color: var(--bg-sidebar);
+        }
+
+        .user-profile-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            overflow: hidden;
+        }
+
+        .profile-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            opacity: 0;
+            width: 0;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover .user-info {
+            opacity: 1;
+            width: auto;
+        }
+
+        .user-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .logout-btn {
+            opacity: 0;
+            width: 0;
+            padding: 0;
+            border: none;
+            background: transparent;
+            color: #dc2626;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .logout-btn:hover {
+                background-color: #fee2e2;
+            }
+
+        .sidebar:hover .logout-btn {
+            opacity: 1;
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+        }
+        /* Content */
+        .glowny-widok {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-body);
+            overflow: hidden;
+        }
+
+        .gorny-pasek {
+            height: 68px;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            background: var(--header-bg);
+        }
+
+            .gorny-pasek h1 {
+                font-size: 24px;
+                font-weight: 600;
+                color: var(--text-main);
+                margin: 0;
+            }
+
+        .kontener-tresci {
+            padding: 40px;
+            overflow-y: auto;
+            flex-grow: 1;
+            background: var(--bg-body);
+        }
+
+        .sekcja-formularza {
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .karta {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            width: 100%;
+        }
+
+        .tytul-karty {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .grid-2-kolumny {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grupa-pola {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .etykieta {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-sec);
+        }
+
+        .pole-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+            font-family: inherit;
+            background: var(--input-bg);
+            color: var(--text-main);
+        }
+
+            .pole-input:focus {
+                border-color: #2563eb;
+            }
+
+        .pole-readonly {
+            background-color: var(--hover);
+            color: var(--text-main);
+            font-family: monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .tekst-pomocniczy {
+            font-size: 13px;
+            color: var(--text-sec);
+            font-style: italic;
+            margin-top: 12px;
+        }
+
+        .kontener-przyciskow {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
+        .btn-dodaj {
+            padding: 10px 24px;
+            background-color: #2563eb;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .btn-dodaj:hover {
+                background-color: #1d4ed8;
+            }
+
+            .btn-dodaj:disabled {
+                background-color: #93c5fd;
+                cursor: not-allowed;
+            }
+
+        .ukryte {
+            display: none;
+        }
+
+        .pokaz {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header"><h1 class="logo-tekst">LungCare+</h1><button class="toggle-btn" title="Zwiń/Rozwiń"><span class="material-symbols-outlined" style="font-size: 28px;">chevron_left</span></button></div>
+        <nav class="sidebar-nav">
+            <button class="nav-item" onclick="window.location.href='strona po logowaniu.html'"><span class="material-symbols-outlined">grid_view</span> <span class="nav-text">Pacjenci</span></button>
+            <button class="nav-item" onclick="window.location.href='vademecum.html'"><span class="material-symbols-outlined">menu_book</span> <span class="nav-text">Vademecum</span></button>
+            <button class="nav-item active"><span class="material-symbols-outlined">person_add</span> <span class="nav-text">Dodaj Pacjenta</span></button>
+            <button class="nav-item" onclick="window.location.href='ustawienia.html'"><span class="material-symbols-outlined">settings</span> <span class="nav-text">Ustawienia</span></button>
+        </nav>
+        <div class="sidebar-footer"><div class="user-profile-container"><div class="profile-left"><div class="avatar-circle" id="profil-inicjaly">AK</div><div class="user-info"><p class="user-name" id="profil-imie">Anna Kowalska</p></div></div><button onclick="wyloguj()" class="logout-btn" title="Wyloguj się"><span class="material-symbols-outlined" style="font-size: 20px;">logout</span></button></div></div>
+    </aside>
+    <main class="glowny-widok">
+        <div class="gorny-pasek"><h1>Dodaj Pacjenta</h1></div>
+        <div class="kontener-tresci">
+            <div class="sekcja-formularza">
+                <div class="karta"><h3 class="tytul-karty">Dane Pacjenta</h3><div class="grid-2-kolumny"><div class="grupa-pola"><label class="etykieta">Imię *</label><input type="text" id="input-imie" class="pole-input" placeholder="np. Jan" oninput="generujDane()"></div><div class="grupa-pola"><label class="etykieta">Nazwisko *</label><input type="text" id="input-nazwisko" class="pole-input" placeholder="np. Kowalski" oninput="generujDane()"></div></div><div class="grupa-pola"><label class="etykieta">Wiek *</label><input type="number" id="input-wiek" class="pole-input" placeholder="np. 58" oninput="sprawdzWypelnienie()"></div></div>
+                <div id="karta-dostepowa" class="karta ukryte"><h3 class="tytul-karty">Dane Dostępowe (Generowane Automatycznie)</h3><div class="grupa-pola"><label class="etykieta">Login / Email</label><input type="text" id="gen-email" class="pole-input pole-readonly" readonly></div><div class="grupa-pola"><label class="etykieta">Kod Weryfikacyjny</label><input type="text" id="gen-kod" class="pole-input pole-readonly" readonly style="font-size: 16px; letter-spacing: 2px;"></div><div class="grupa-pola"><label class="etykieta">Hasło Tymczasowe</label><input type="text" id="gen-haslo" class="pole-input pole-readonly" readonly style="font-size: 16px; letter-spacing: 2px;"></div><p class="tekst-pomocniczy">Widoczne dla sekretarki w celu ręcznego przekazania w razie błędu połączenia.</p></div>
+                <div class="kontener-przyciskow"><button id="btn-zapisz" class="btn-dodaj" disabled onclick="zapiszPacjenta()">Dodaj Pacjenta</button></div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function generujDane() { const imie = document.getElementById('input-imie').value.trim(); const nazwisko = document.getElementById('input-nazwisko').value.trim(); const karta = document.getElementById('karta-dostepowa'); if (imie && nazwisko) { if (karta.classList.contains('ukryte')) { karta.classList.remove('ukryte'); karta.classList.add('pokaz'); if (!document.getElementById('gen-kod').value) { document.getElementById('gen-kod').value = Math.floor(100000 + Math.random() * 900000); document.getElementById('gen-haslo').value = Math.random().toString(36).slice(-8).toUpperCase(); } } const safeImie = imie.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l"); const safeNazwisko = nazwisko.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l"); document.getElementById('gen-email').value = `${safeImie}.${safeNazwisko}@patient.lungcare.pl`; } else { if (!imie || !nazwisko) document.getElementById('gen-email').value = ""; } sprawdzWypelnienie(); }
+        function sprawdzWypelnienie() { document.getElementById('btn-zapisz').disabled = !(document.getElementById('input-imie').value && document.getElementById('input-nazwisko').value && document.getElementById('input-wiek').value); }
+        function zapiszPacjenta() { alert("Pacjent dodany! Login: " + document.getElementById('gen-email').value); window.location.href = "strona po logowaniu.html"; }
+        function wczytajMotyw() { if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode'); }
+        function wczytajProfil() { const u = JSON.parse(localStorage.getItem("zalogowanyUzytkownik")) || { imie: "Anna Kowalska", inicjaly: "AK", kolor: "#3b82f6" }; document.getElementById("profil-imie").innerText = u.imie; document.getElementById("profil-inicjaly").innerText = u.inicjaly; document.getElementById("profil-inicjaly").style.backgroundColor = u.kolor; }
+        function wyloguj() {
+            localStorage.removeItem("zalogowanyUzytkownik");
+            localStorage.removeItem("theme");
+            window.location.href = "Strona logowania.html";
+        }
+        wczytajMotyw(); wczytajProfil();
+    </script>
+</body>
+</html>

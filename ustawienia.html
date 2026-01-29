@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <title>LungCare+ Ustawienia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f9fafb;
+            --bg-sidebar: white;
+            --bg-card: white;
+            --text-main: #1f2937;
+            --text-sec: #4b5563;
+            --border: #e5e7eb;
+            --input-bg: white;
+            --input-disabled: #f3f4f6;
+            --header-bg: white;
+        }
+
+        body.dark-mode {
+            --bg-body: #111827;
+            --bg-sidebar: #1f2937;
+            --bg-card: #1f2937;
+            --text-main: #f3f4f6;
+            --text-sec: #9ca3af;
+            --border: #374151;
+            --input-bg: #374151;
+            --input-disabled: #374151;
+            --header-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            animation: wejscie 0.4s ease-out;
+        }
+
+        @keyframes wejscie {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 72px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            height: 100vh;
+            transition: width 0.3s ease-in-out;
+            z-index: 50;
+            overflow: hidden;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.02);
+        }
+
+            .sidebar:hover {
+                width: 220px;
+            }
+
+        .sidebar-header {
+            height: 68px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .logo-tekst {
+            font-size: 24px;
+            color: #007AFF;
+            font-weight: 800;
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover .logo-tekst {
+            opacity: 1;
+            width: auto;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-sec);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .toggle-btn:hover {
+                color: #2563eb;
+            }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            color: var(--text-sec);
+        }
+
+            .nav-item .material-symbols-outlined {
+                width: 20px;
+                height: 20px;
+                font-size: 20px;
+                flex-shrink: 0;
+                margin-right: 12px;
+            }
+
+        .nav-text {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover .nav-text {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .nav-item.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .nav-item:not(.active):hover {
+            background-color: var(--input-disabled);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding: 12px;
+            background-color: var(--bg-sidebar);
+        }
+
+        .user-profile-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            overflow: hidden;
+        }
+
+        .profile-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            opacity: 0;
+            width: 0;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover .user-info {
+            opacity: 1;
+            width: auto;
+        }
+
+        .user-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .logout-btn {
+            opacity: 0;
+            width: 0;
+            padding: 0;
+            border: none;
+            background: transparent;
+            color: #dc2626;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .logout-btn:hover {
+                background-color: #fee2e2;
+            }
+
+        .sidebar:hover .logout-btn {
+            opacity: 1;
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+        }
+        /* Content */
+        .glowny-widok {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-body);
+            overflow: hidden;
+        }
+
+        .gorny-pasek {
+            height: 68px;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            background: var(--header-bg);
+        }
+
+            .gorny-pasek h1 {
+                font-size: 24px;
+                font-weight: 600;
+                color: var(--text-main);
+                margin: 0;
+            }
+
+        .kontener-tresci {
+            padding: 40px;
+            overflow-y: auto;
+            flex-grow: 1;
+            background: var(--bg-body);
+        }
+
+        .ustawienia-wrapper {
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .karta {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .karta-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .karta-tytul {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .karta-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .theme-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: var(--input-disabled);
+            border-radius: 8px;
+        }
+
+        .theme-text h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .theme-text p {
+            margin: 4px 0 0;
+            font-size: 14px;
+            color: var(--text-sec);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+        input:checked + .slider {
+            background-color: #2563eb;
+        }
+
+            input:checked + .slider:before {
+                transform: translateX(20px);
+            }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-sec);
+        }
+
+        .input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+        }
+
+            .input:disabled {
+                background-color: var(--input-disabled);
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+
+            .input:focus {
+                border-color: #2563eb;
+            }
+
+        .btn-zapisz {
+            align-self: flex-start;
+            padding: 10px 20px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+
+            .btn-zapisz:hover {
+                background-color: #1d4ed8;
+            }
+
+        .text-italic {
+            font-style: italic;
+            font-size: 13px;
+            color: var(--text-sec);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header"><h1 class="logo-tekst">LungCare+</h1><button class="toggle-btn" title="Zwiń/Rozwiń"><span class="material-symbols-outlined" style="font-size: 28px;">chevron_left</span></button></div>
+        <nav class="sidebar-nav">
+            <button class="nav-item" onclick="window.location.href='strona po logowaniu.html'"><span class="material-symbols-outlined">grid_view</span> <span class="nav-text">Pacjenci</span></button>
+            <button class="nav-item" onclick="window.location.href='vademecum.html'"><span class="material-symbols-outlined">menu_book</span> <span class="nav-text">Vademecum</span></button>
+            <button class="nav-item" onclick="window.location.href='dodaj pacjenta.html'"><span class="material-symbols-outlined">person_add</span> <span class="nav-text">Dodaj Pacjenta</span></button>
+            <button class="nav-item active"><span class="material-symbols-outlined">settings</span> <span class="nav-text">Ustawienia</span></button>
+        </nav>
+        <div class="sidebar-footer"><div class="user-profile-container"><div class="profile-left"><div class="avatar-circle" id="profil-inicjaly">AK</div><div class="user-info"><p class="user-name" id="profil-imie">Anna Kowalska</p></div></div><button onclick="wyloguj()" class="logout-btn" title="Wyloguj się"><span class="material-symbols-outlined" style="font-size: 20px;">logout</span></button></div></div>
+    </aside>
+    <main class="glowny-widok">
+        <div class="gorny-pasek"><h1>Ustawienia</h1></div>
+        <div class="kontener-tresci">
+            <div class="ustawienia-wrapper">
+                <div class="karta"><div class="karta-header"><span class="material-symbols-outlined" id="ikona-motywu">light_mode</span><h3 class="karta-tytul">Wygląd</h3></div><div class="karta-body"><div class="theme-control"><div class="theme-text"><h4>Motyw</h4><p id="opis-motywu">Jasny</p></div><div style="display:flex; align-items:center; gap:12px;"><span class="label">Jasny</span><label class="switch"><input type="checkbox" id="theme-switch" onchange="zmienMotyw()"><span class="slider"></span></label><span class="label">Ciemny</span></div></div></div></div>
+                <div class="karta"><div class="karta-header"><span class="material-symbols-outlined">person</span><h3 class="karta-tytul">Dane konta <span class="material-symbols-outlined" style="font-size:18px; color:#9ca3af;">lock</span></h3></div><div class="karta-body"><div class="grid-2"><div class="form-group"><label class="label">Imię i nazwisko</label><input type="text" class="input" id="input-imie" disabled></div><div class="form-group"><label class="label">Email</label><input type="text" class="input" id="input-email" disabled></div></div><div class="form-group"><label class="label">Rola</label><input type="text" class="input" id="input-rola" disabled></div><p class="text-italic">Te dane są zarządzane przez administratora i nie mogą być zmienione tutaj.</p></div></div>
+                <div class="karta"><div class="karta-header"><span class="material-symbols-outlined">security</span><h3 class="karta-tytul">Bezpieczeństwo</h3></div><div class="karta-body"><div class="grid-3"><div class="form-group"><label class="label">Obecne hasło</label><input type="password" class="input" placeholder="••••••••"></div><div class="form-group"><label class="label">Nowe hasło</label><input type="password" class="input" placeholder="••••••••"></div><div class="form-group"><label class="label">Potwierdź nowe hasło</label><input type="password" class="input" placeholder="••••••••"></div></div><button class="btn-zapisz" onclick="alert('Hasło zostało zmienione!')">Zmień hasło</button></div></div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function wczytajMotyw() { const isDark = localStorage.getItem('theme') === 'dark'; if (isDark) { document.body.classList.add('dark-mode'); document.getElementById('theme-switch').checked = true; document.getElementById('opis-motywu').innerText = "Ciemny"; document.getElementById('ikona-motywu').innerText = "dark_mode"; } }
+        function zmienMotyw() { const checkbox = document.getElementById('theme-switch'); const isDark = checkbox.checked; if (isDark) { document.body.classList.add('dark-mode'); localStorage.setItem('theme', 'dark'); document.getElementById('opis-motywu').innerText = "Ciemny"; document.getElementById('ikona-motywu').innerText = "dark_mode"; } else { document.body.classList.remove('dark-mode'); localStorage.setItem('theme', 'light'); document.getElementById('opis-motywu').innerText = "Jasny"; document.getElementById('ikona-motywu').innerText = "light_mode"; } }
+        function wczytajProfil() { const u = JSON.parse(localStorage.getItem("zalogowanyUzytkownik")) || { imie: "Anna Kowalska", rola: "Lekarz Specjalista", inicjaly: "AK", kolor: "#3b82f6", email: "anna@lungcare.pl" }; document.getElementById("profil-imie").innerText = u.imie; document.getElementById("profil-inicjaly").innerText = u.inicjaly; document.getElementById("profil-inicjaly").style.backgroundColor = u.kolor; document.getElementById("input-imie").value = u.imie; document.getElementById("input-email").value = u.email; document.getElementById("input-rola").value = u.rola; }
+        function wyloguj() {
+            localStorage.removeItem("zalogowanyUzytkownik");
+            localStorage.removeItem("theme");
+            window.location.href = "Strona logowania.html";
+        }
+        wczytajMotyw(); wczytajProfil();
+    </script>
+</body>
+</html>

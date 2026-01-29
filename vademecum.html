@@ -1,0 +1,929 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <title>LungCare+ Vademecum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f9fafb;
+            --bg-sidebar: white;
+            --bg-card: white;
+            --text-main: #1f2937;
+            --text-sec: #4b5563;
+            --border: #e5e7eb;
+            --hover: #f3f4f6;
+            --input-bg: white;
+            --header-bg: white;
+        }
+
+        body.dark-mode {
+            --bg-body: #111827;
+            --bg-sidebar: #1f2937;
+            --bg-card: #1f2937;
+            --text-main: #f3f4f6;
+            --text-sec: #9ca3af;
+            --border: #374151;
+            --hover: #374151;
+            --input-bg: #374151;
+            --header-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            animation: wejscie 0.4s ease-out;
+        }
+
+        @keyframes wejscie {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 72px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            height: 100vh;
+            transition: width 0.3s ease-in-out;
+            z-index: 50;
+            overflow: hidden;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.02);
+        }
+
+            .sidebar:hover {
+                width: 220px;
+            }
+
+        .sidebar-header {
+            height: 68px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .logo-tekst {
+            font-size: 24px;
+            color: #007AFF;
+            font-weight: 800;
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover .logo-tekst {
+            opacity: 1;
+            width: auto;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-sec);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+            .toggle-btn:hover {
+                color: #2563eb;
+            }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            color: var(--text-sec);
+        }
+
+            .nav-item .material-symbols-outlined {
+                width: 20px;
+                height: 20px;
+                font-size: 20px;
+                flex-shrink: 0;
+                margin-right: 12px;
+            }
+
+        .nav-text {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover .nav-text {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .nav-item.active {
+            background-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item:not(.active):hover {
+            background-color: var(--hover);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding: 12px;
+            background-color: var(--bg-sidebar);
+        }
+
+        .user-profile-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            overflow: hidden;
+        }
+
+        .profile-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            opacity: 0;
+            width: 0;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover .user-info {
+            opacity: 1;
+            width: auto;
+        }
+
+        .user-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .logout-btn {
+            opacity: 0;
+            width: 0;
+            padding: 0;
+            border: none;
+            background: transparent;
+            color: #dc2626;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .logout-btn:hover {
+                background-color: #fee2e2;
+                color: #b91c1c;
+            }
+
+        .sidebar:hover .logout-btn {
+            opacity: 1;
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+        }
+
+        /* Main */
+        .glowny-widok {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-body);
+            overflow: hidden;
+        }
+
+        .gorny-pasek {
+            height: 68px;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            background: var(--header-bg);
+        }
+
+            .gorny-pasek h1 {
+                font-size: 24px;
+                font-weight: 600;
+                color: var(--text-main);
+                margin: 0;
+            }
+
+        .kontener-tresci {
+            padding: 40px;
+            overflow-y: auto;
+            flex-grow: 1;
+            background: var(--bg-body);
+        }
+
+        /* Vademecum */
+        .panel-dodawania {
+            background: #F0F9FF;
+            border: 1px solid #007AFF;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        body.dark-mode .panel-dodawania {
+            background: #1e3a8a;
+            border-color: #3b82f6;
+        }
+
+        .dodawanie-tytul {
+            font-size: 16px;
+            color: var(--text-sec);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .przyciski-akcji {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-akcja {
+            height: 80px;
+            border: 2px solid #007AFF;
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: #007AFF;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        body.dark-mode .btn-akcja {
+            color: #60a5fa;
+            border-color: #60a5fa;
+        }
+
+        .btn-akcja:hover {
+            background-color: var(--hover);
+        }
+
+        h3.tytul-sekcji {
+            font-size: 18px;
+            margin: 0 0 20px 0;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .grid-materialy {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .karta {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: visible;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+            transition: 0.2s;
+        }
+
+            .karta:hover {
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+        .wideo-miniaturka {
+            height: 192px;
+            background-color: #374151;
+            position: relative;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+        }
+
+            .wideo-miniaturka img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .czas-trwania {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .tytul-karty {
+            padding: 16px 16px 8px 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 16px;
+        }
+
+        .opis-wideo {
+            padding: 0 16px 16px 16px;
+            font-size: 13px;
+            color: var(--text-sec);
+        }
+
+        .tresc-karty {
+            padding: 24px;
+        }
+
+        .naglowek-ikona {
+            display: flex;
+            align-items: start;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .ikona-tlo {
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tlo-niebieskie {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .tlo-zolte {
+            color: #ca8a04;
+        }
+
+        .tekst-opis {
+            font-size: 14px;
+            color: var(--text-sec);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .link-artykulu {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: 0.2s;
+        }
+
+            .link-artykulu:hover .ikona-tlo {
+                background-color: #2563eb;
+                color: white;
+            }
+
+        .notatka-interaktywna {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+            .notatka-interaktywna:hover {
+                transform: translateY(-2px);
+            }
+
+        .notatka-tresc-ukryta {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .notatka-hint {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .menu-trigger {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+            .menu-trigger.wideo {
+                background: rgba(0,0,0,0.5);
+                color: white;
+            }
+
+                .menu-trigger.wideo:hover {
+                    background: rgba(0,0,0,0.7);
+                }
+
+            .menu-trigger.zwykle {
+                background: #f3f4f6;
+                color: #374151;
+            }
+
+                .menu-trigger.zwykle:hover {
+                    background: #e5e7eb;
+                }
+
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 140px;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+            .menu-dropdown.pokaz {
+                display: block;
+            }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-sec);
+        }
+
+            .dropdown-item:hover {
+                background-color: var(--hover);
+            }
+
+            .dropdown-item.usun {
+                color: #dc2626;
+            }
+
+                .dropdown-item.usun:hover {
+                    background-color: #fee2e2;
+                }
+
+        .modal-tlo {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-okno {
+            background: var(--bg-card);
+            width: 500px;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: zoomIn 0.2s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-tytul {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-sec);
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+            font-family: inherit;
+            background: var(--input-bg);
+            color: var(--text-main);
+        }
+
+            .form-input:focus {
+                border-color: #2563eb;
+            }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-stopka {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-anuluj {
+            padding: 10px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-weight: 500;
+            color: var(--text-sec);
+            cursor: pointer;
+        }
+
+        .btn-zatwierdz {
+            padding: 10px 16px;
+            background: #2563eb;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-usun-potwierdz {
+            padding: 10px 16px;
+            background: #dc2626;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+        }
+
+        .form-input[type="file"] {
+            padding: 6px;
+            cursor: pointer;
+        }
+
+            .form-input[type="file"]::file-selector-button {
+                background-color: #eff6ff;
+                color: #2563eb;
+                border: 1px solid #bfdbfe;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-weight: 600;
+                font-family: inherit;
+                margin-right: 12px;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+                .form-input[type="file"]::file-selector-button:hover {
+                    background-color: #dbeafe;
+                }
+
+        body.dark-mode .form-input[type="file"]::file-selector-button {
+            background-color: #1e3a8a;
+            color: #93c5fd;
+            border-color: #3b82f6;
+        }
+
+            body.dark-mode .form-input[type="file"]::file-selector-button:hover {
+                background-color: #1e40af;
+            }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header"><h1 class="logo-tekst">LungCare+</h1><button class="toggle-btn" title="Zwiń/Rozwiń"><span class="material-symbols-outlined" style="font-size: 28px;">chevron_left</span></button></div>
+        <nav class="sidebar-nav">
+            <button class="nav-item" onclick="window.location.href='strona po logowaniu.html'"><span class="material-symbols-outlined">grid_view</span> <span class="nav-text">Pacjenci</span></button>
+            <button class="nav-item active"><span class="material-symbols-outlined">menu_book</span> <span class="nav-text">Vademecum</span></button>
+            <button class="nav-item" onclick="window.location.href='dodaj pacjenta.html'"><span class="material-symbols-outlined">person_add</span> <span class="nav-text">Dodaj Pacjenta</span></button>
+            <button class="nav-item" onclick="window.location.href='ustawienia.html'"><span class="material-symbols-outlined">settings</span> <span class="nav-text">Ustawienia</span></button>
+        </nav>
+        <div class="sidebar-footer"><div class="user-profile-container"><div class="profile-left"><div class="avatar-circle" id="profil-inicjaly">AK</div><div class="user-info"><p class="user-name" id="profil-imie">Anna Kowalska</p></div></div><button onclick="wyloguj()" class="logout-btn" title="Wyloguj się"><span class="material-symbols-outlined" style="font-size: 20px;">logout</span></button></div></div>
+    </aside>
+    <main class="glowny-widok">
+        <div class="gorny-pasek"><h1>Vademecum</h1></div>
+        <div class="kontener-tresci">
+            <div class="panel-dodawania">
+                <div class="dodawanie-tytul">Dodaj nowy materiał</div>
+                <div class="przyciski-akcji">
+                    <button class="btn-akcja" onclick="otworzModal('wideo')"><span class="material-symbols-outlined">videocam</span> Dodaj Film</button>
+                    <button class="btn-akcja" onclick="otworzModal('artykul')"><span class="material-symbols-outlined">language</span> Dodaj Artykuł</button>
+                    <button class="btn-akcja" onclick="otworzModal('notatka')"><span class="material-symbols-outlined">note_add</span> Dodaj Notatkę</button>
+                </div>
+            </div>
+            <h3 class="tytul-sekcji">Filmy Edukacyjne</h3><div class="grid-materialy" id="lista-wideo"></div>
+            <h3 class="tytul-sekcji">Artykuły</h3><div class="grid-materialy" id="lista-artykuly"></div>
+            <h3 class="tytul-sekcji">Notatki</h3><div class="grid-materialy" id="lista-notatki"></div>
+        </div>
+    </main>
+    <div class="modal-tlo" id="modal-glowny"><div class="modal-okno"><div class="modal-tytul" id="modal-tytul-tekst">Dodaj Materiał</div><input type="hidden" id="modal-typ"><input type="hidden" id="modal-id"><div><label class="form-label" id="label-tytul">Tytuł *</label><input type="text" id="input-tytul" class="form-input" placeholder="..."></div><div id="grupa-tresc"><label class="form-label" id="label-tresc">Treść *</label><input type="text" id="input-tresc" class="form-input" placeholder="..."></div><div id="grupa-opis"><label class="form-label">Opis (opcjonalnie)</label><textarea id="input-opis" class="form-textarea form-input" placeholder="Krótki opis..."></textarea></div><div id="grupa-plik" style="display:none;"><label class="form-label">Plik wideo</label><input type="file" id="input-plik" class="form-input" accept="video/*"></div><div class="modal-stopka"><button class="btn-anuluj" onclick="zamknijModal()">Anuluj</button><button class="btn-zatwierdz" onclick="zapiszMaterial()">Zapisz</button></div></div></div>
+    <div class="modal-tlo" id="modal-usun"><div class="modal-okno" style="width: 400px;"><div class="modal-tytul">Usunąć?</div><p style="color:var(--text-sec); font-size:14px; margin:0;">Nieodwracalne.</p><div class="modal-stopka"><button class="btn-anuluj" onclick="zamknijModalUsun()">Nie</button><button class="btn-usun-potwierdz" onclick="potwierdzUsuniecie()">Tak</button></div></div></div>
+    <script>
+        // PUSTE TABLICE (Brak przykładowych treści)
+        let materialyWideo = [];
+        let materialyArtykul = [];
+        let materialyNotatka = [];
+        let elementDoUsuniecia = null;
+
+        function renderujWszystko() { renderujWideo(); renderujArtykuly(); renderujNotatki(); }
+
+        function renderujWideo() {
+            const k = document.getElementById('lista-wideo');
+            k.innerHTML = '';
+            materialyWideo.forEach(m => {
+                const opisHtml = m.opis ? `<div class="opis-wideo">${m.opis}</div>` : '';
+                k.innerHTML += `
+                    <div class="karta">
+                        <button class="menu-trigger wideo" onclick="pokazMenu(this,event)"><span class="material-symbols-outlined">more_vert</span></button>
+                        <div class="menu-dropdown"><div class="dropdown-item" onclick="edytujMaterial('wideo',${m.id})">Edytuj</div><div class="dropdown-item usun" onclick="otworzModalUsun('wideo',${m.id})">Usuń</div></div>
+                        <div class="wideo-miniaturka">${m.isFile ? `<video src="${m.thumbnail}" controls style="width:100%;height:100%;object-fit:cover;"></video>` : `<img src="${m.thumbnail}"><div class="czas-trwania">${m.duration}</div>`}</div>
+                        <div class="tytul-karty">${m.title}</div>
+                        ${opisHtml}
+                    </div>`;
+            });
+        }
+
+        function renderujArtykuly() {
+            const k = document.getElementById('lista-artykuly');
+            k.innerHTML = '';
+            materialyArtykul.forEach(m => {
+                const opisHtml = m.description ? `<p class="tekst-opis">${m.description}</p>` : '';
+
+                k.innerHTML += `
+                    <div class="karta">
+                        <button class="menu-trigger zwykle" onclick="pokazMenu(this,event)"><span class="material-symbols-outlined">more_vert</span></button>
+                        <div class="menu-dropdown"><div class="dropdown-item" onclick="edytujMaterial('artykul',${m.id})">Edytuj</div><div class="dropdown-item usun" onclick="otworzModalUsun('artykul',${m.id})">Usuń</div></div>
+                        <div class="tresc-karty">
+                            <a href="${m.url}" target="_blank" class="link-artykulu">
+                                <div class="naglowek-ikona">
+                                    <div class="ikona-tlo tlo-niebieskie"><span class="material-symbols-outlined">language</span></div>
+                                    <div>
+                                        <div style="font-weight:600;">${m.title}</div>
+                                        </div>
+                                </div>
+                            </a>
+                            ${opisHtml}
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function renderujNotatki() {
+            const k = document.getElementById('lista-notatki');
+            k.innerHTML = '';
+            materialyNotatka.forEach(m => {
+                k.innerHTML += `
+                    <div class="karta notatka-interaktywna" style="border-color:#fef3c7;background:${document.body.classList.contains('dark-mode') ? '#451a03' : '#fffbeb'}" onclick="rozwinNotatke(this)">
+                        <button class="menu-trigger zwykle" onclick="pokazMenu(this,event)"><span class="material-symbols-outlined">more_vert</span></button>
+                        <div class="menu-dropdown"><div class="dropdown-item" onclick="edytujMaterial('notatka',${m.id})">Edytuj</div><div class="dropdown-item usun" onclick="otworzModalUsun('notatka',${m.id})">Usuń</div></div>
+                        <div class="tresc-karty">
+                            <div class="naglowek-ikona">
+                                <span class="material-symbols-outlined tlo-zolte">sticky_note_2</span>
+                                <div style="font-weight:600;">${m.title}</div>
+                            </div>
+                            <div class="notatka-hint">Kliknij, aby rozwinąć...</div>
+                            <p class="tekst-opis notatka-tresc-ukryta">${m.content}</p>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function rozwinNotatke(element) {
+            const tresc = element.querySelector('.notatka-tresc-ukryta');
+            const hint = element.querySelector('.notatka-hint');
+            if (tresc.style.display === 'block') {
+                tresc.style.display = 'none';
+                hint.style.display = 'block';
+            } else {
+                tresc.style.display = 'block';
+                hint.style.display = 'none';
+            }
+        }
+
+        function otworzModal(t) {
+            document.getElementById('modal-glowny').style.display = 'flex';
+            document.getElementById('modal-typ').value = t;
+            document.getElementById('modal-id').value = '';
+            document.getElementById('input-tytul').value = '';
+            document.getElementById('input-tresc').value = '';
+            document.getElementById('input-opis').value = '';
+            document.getElementById('input-plik').value = '';
+
+            // ZMIANA LABELA ZALEŻNIE OD TYPU
+            const labelTresc = document.getElementById('label-tresc');
+
+            if (t == 'wideo') {
+                document.getElementById('grupa-tresc').style.display = 'none';
+                document.getElementById('grupa-opis').style.display = 'block';
+                document.getElementById('grupa-plik').style.display = 'block';
+            } else if (t == 'artykul') {
+                labelTresc.innerText = "Podaj link *"; // ZMIANA ETYKIETY
+                document.getElementById('grupa-tresc').style.display = 'block';
+                document.getElementById('grupa-opis').style.display = 'block';
+                document.getElementById('grupa-plik').style.display = 'none';
+            } else {
+                labelTresc.innerText = "Treść *"; // PRZYWRÓCENIE ETYKIETY
+                document.getElementById('grupa-tresc').style.display = 'block';
+                document.getElementById('grupa-opis').style.display = 'none';
+                document.getElementById('grupa-plik').style.display = 'none';
+            }
+        }
+
+        function edytujMaterial(t, id) {
+            otworzModal(t);
+            document.getElementById('modal-id').value = id;
+            let item;
+            if (t == 'wideo') item = materialyWideo.find(x => x.id == id);
+            else if (t == 'artykul') item = materialyArtykul.find(x => x.id == id);
+            else item = materialyNotatka.find(x => x.id == id);
+
+            document.getElementById('input-tytul').value = item.title;
+            if (t == 'wideo') {
+                document.getElementById('input-opis').value = item.opis || '';
+                document.getElementById('grupa-plik').style.display = 'none';
+            } else if (t == 'artykul') {
+                document.getElementById('input-tresc').value = item.url;
+                document.getElementById('input-opis').value = item.description || '';
+            } else {
+                document.getElementById('input-tresc').value = item.content;
+            }
+        }
+
+        function zapiszMaterial() {
+            const t = document.getElementById('modal-typ').value;
+            const id = document.getElementById('modal-id').value;
+            const tit = document.getElementById('input-tytul').value;
+
+            if (!tit) return;
+
+            if (t == 'wideo') {
+                const desc = document.getElementById('input-opis').value;
+                if (id) {
+                    const i = materialyWideo.find(x => x.id == id);
+                    i.title = tit;
+                    i.opis = desc;
+                } else {
+                    const f = document.getElementById('input-plik').files[0];
+                    materialyWideo.unshift({
+                        id: Date.now(),
+                        title: tit,
+                        opis: desc,
+                        thumbnail: f ? URL.createObjectURL(f) : "https://via.placeholder.com/400x250",
+                        duration: "0:00",
+                        isFile: !!f
+                    });
+                }
+            } else if (t == 'artykul') {
+                const u = document.getElementById('input-tresc').value;
+                const d = document.getElementById('input-opis').value;
+                if (id) {
+                    const i = materialyArtykul.find(x => x.id == id);
+                    i.title = tit;
+                    i.url = u;
+                    i.description = d;
+                } else {
+                    materialyArtykul.unshift({ id: Date.now(), title: tit, url: u, description: d });
+                }
+            } else {
+                const c = document.getElementById('input-tresc').value;
+                if (id) {
+                    const i = materialyNotatka.find(x => x.id == id);
+                    i.title = tit;
+                    i.content = c;
+                } else {
+                    materialyNotatka.unshift({ id: Date.now(), title: tit, content: c });
+                }
+            }
+            zamknijModal();
+            renderujWszystko();
+        }
+
+        function zamknijModal() { document.getElementById('modal-glowny').style.display = 'none'; }
+        function otworzModalUsun(t, id) { elementDoUsuniecia = { t, id }; document.getElementById('modal-usun').style.display = 'flex'; }
+        function potwierdzUsuniecie() {
+            const { t, id } = elementDoUsuniecia;
+            if (t == 'wideo') materialyWideo = materialyWideo.filter(x => x.id !== id);
+            else if (t == 'artykul') materialyArtykul = materialyArtykul.filter(x => x.id !== id);
+            else materialyNotatka = materialyNotatka.filter(x => x.id !== id);
+            zamknijModalUsun();
+            renderujWszystko();
+        }
+        function zamknijModalUsun() { document.getElementById('modal-usun').style.display = 'none'; }
+        function pokazMenu(b, e) { e.stopPropagation(); document.querySelectorAll('.menu-dropdown').forEach(el => el.classList.remove('pokaz')); b.nextElementSibling.classList.toggle('pokaz'); }
+        document.addEventListener('click', () => document.querySelectorAll('.menu-dropdown').forEach(el => el.classList.remove('pokaz')));
+
+        function wczytajMotyw() { if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode'); }
+        function wczytajProfil() { const u = JSON.parse(localStorage.getItem("zalogowanyUzytkownik")) || { imie: "Anna Kowalska", inicjaly: "AK", kolor: "#3b82f6" }; document.getElementById("profil-imie").innerText = u.imie; document.getElementById("profil-inicjaly").innerText = u.inicjaly; document.getElementById("profil-inicjaly").style.backgroundColor = u.kolor; }
+        function wyloguj() {
+            localStorage.removeItem("zalogowanyUzytkownik");
+            localStorage.removeItem("theme");
+            window.location.href = "Strona logowania.html";
+        }
+        wczytajMotyw(); wczytajProfil(); renderujWszystko();
+    </script>
+</body>
+</html>

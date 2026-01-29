@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LungCare+ Logowanie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #ecfeff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            color: #1f2937;
+        }
+
+        .karta-logowania {
+            background: white;
+            width: 100%;
+            max-width: 360px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .naglowek-karty {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            color: #2563eb;
+            font-weight: 700;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .logo-plus {
+            color: #1d4ed8;
+        }
+
+        .tytul-logowania {
+            font-size: 16px;
+            color: #1f2937;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .podtytul {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .tresc-karty {
+            padding: 10px 25px 25px 25px;
+        }
+
+        .formularz {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .grupa-pola {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .etykieta {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .pole-tekstowe {
+            width: 100%;
+            height: 38px;
+            padding: 0 10px;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+
+            .pole-tekstowe:focus {
+                border-color: #3b82f6;
+                background-color: white;
+            }
+
+        .przycisk-oko {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            display: flex;
+        }
+
+            .przycisk-oko:hover {
+                color: #374151;
+            }
+
+            .przycisk-oko .material-symbols-outlined {
+                font-size: 18px;
+            }
+
+        .btn-zaloguj {
+            width: 100%;
+            height: 40px;
+            background-color: #2563eb;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+            .btn-zaloguj:hover {
+                background-color: #1d4ed8;
+            }
+
+        .sekcja-bezpieczenstwa {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .badge-bezpieczenstwo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .badge-ssl {
+            color: #059669;
+            font-weight: 500;
+        }
+
+        .badge-bezpieczenstwo .material-symbols-outlined {
+            font-size: 14px;
+        }
+
+        .stopka-strony {
+            position: absolute;
+            bottom: 15px;
+            text-align: center;
+            width: 100%;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <div class="karta-logowania">
+        <div class="naglowek-karty">
+            <div class="logo">LungCare<span class="logo-plus">+</span></div>
+            <h2 class="tytul-logowania">Zaloguj się</h2>
+            <p class="podtytul">Wprowadź dane dostępowe</p>
+        </div>
+        <div class="tresc-karty">
+            <form class="formularz" onsubmit="obslugaLogowania(event)">
+                <div class="grupa-pola">
+                    <label class="etykieta" for="email">E-mail</label>
+                    <input type="email" id="email" class="pole-tekstowe" placeholder="adres@email.com" required>
+                </div>
+                <div class="grupa-pola">
+                    <label class="etykieta" for="password">Hasło</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="pole-tekstowe" placeholder="••••••••" required style="padding-right: 35px;">
+                        <button type="button" class="przycisk-oko" onclick="pokazUkryjHaslo()">
+                            <span class="material-symbols-outlined" id="ikona-oka">visibility</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-zaloguj">Zaloguj się</button>
+                <div class="sekcja-bezpieczenstwa">
+                    <div class="badge-bezpieczenstwo badge-ssl"><span class="material-symbols-outlined">verified_user</span> Połączenie szyfrowane (SSL)</div>
+                    <div class="badge-bezpieczenstwo"><span class="material-symbols-outlined">lock</span> Bezpieczny dostęp medyczny</div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="stopka-strony">© 2025 LungCare+ | Wersja Demo 1</div>
+    <script>
+        function pokazUkryjHaslo() {
+            const input = document.getElementById('password');
+            const ikona = document.getElementById('ikona-oka');
+            if (input.type === "password") { input.type = "text"; ikona.innerText = "visibility_off"; } else { input.type = "password"; ikona.innerText = "visibility"; }
+        }
+        function obslugaLogowania(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const haslo = document.getElementById('password').value;
+            if (email && haslo) {
+                const uzytkownik = { imie: "Anna Kowalska", rola: "Lekarz Specjalista", inicjaly: "AK", kolor: "#2563eb", email: email };
+                localStorage.setItem("zalogowanyUzytkownik", JSON.stringify(uzytkownik));
+                window.location.href = "strona po logowaniu.html";
+            }
+        }
+    </script>
+</body>
+</html>
