@@ -430,17 +430,127 @@
         </div>
     </main>
     <script>
-        function generujDane() { const imie = document.getElementById('input-imie').value.trim(); const nazwisko = document.getElementById('input-nazwisko').value.trim(); const karta = document.getElementById('karta-dostepowa'); if (imie && nazwisko) { if (karta.classList.contains('ukryte')) { karta.classList.remove('ukryte'); karta.classList.add('pokaz'); if (!document.getElementById('gen-kod').value) { document.getElementById('gen-kod').value = Math.floor(100000 + Math.random() * 900000); document.getElementById('gen-haslo').value = Math.random().toString(36).slice(-8).toUpperCase(); } } const safeImie = imie.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l"); const safeNazwisko = nazwisko.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l"); document.getElementById('gen-email').value = `${safeImie}.${safeNazwisko}@patient.lungcare.pl`; } else { if (!imie || !nazwisko) document.getElementById('gen-email').value = ""; } sprawdzWypelnienie(); }
-        function sprawdzWypelnienie() { document.getElementById('btn-zapisz').disabled = !(document.getElementById('input-imie').value && document.getElementById('input-nazwisko').value && document.getElementById('input-wiek').value); }
-        function zapiszPacjenta() { alert("Pacjent dodany! Login: " + document.getElementById('gen-email').value); window.location.href = "strona po logowaniu.html"; }
-        function wczytajMotyw() { if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode'); }
-        function wczytajProfil() { const u = JSON.parse(localStorage.getItem("zalogowanyUzytkownik")) || { imie: "Anna Kowalska", inicjaly: "AK", kolor: "#3b82f6" }; document.getElementById("profil-imie").innerText = u.imie; document.getElementById("profil-inicjaly").innerText = u.inicjaly; document.getElementById("profil-inicjaly").style.backgroundColor = u.kolor; }
-        function wyloguj() {
-            localStorage.removeItem("zalogowanyUzytkownik");
-            localStorage.removeItem("theme");
-            window.location.href = "Strona logowania.html";
+    function generujDane() {
+        const imie = document.getElementById('input-imie').value.trim();
+        const nazwisko = document.getElementById('input-nazwisko').value.trim();
+        const karta = document.getElementById('karta-dostepowa');
+
+        if (imie && nazwisko) {
+            if (karta.classList.contains('ukryte')) {
+                karta.classList.remove('ukryte');
+                karta.classList.add('pokaz');
+
+                if (!document.getElementById('gen-kod').value) {
+                    document.getElementById('gen-kod').value = Math.floor(100000 + Math.random() * 900000);
+                    document.getElementById('gen-haslo').value = Math.random().toString(36).slice(-8).toUpperCase();
+                }
+            }
+
+            const safeImie = imie
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/ł/g, "l");
+
+            const safeNazwisko = nazwisko
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/ł/g, "l");
+
+            document.getElementById('gen-email').value = `${safeImie}.${safeNazwisko}@patient.lungcare.pl`;
+        } else {
+            document.getElementById('gen-email').value = "";
         }
-        wczytajMotyw(); wczytajProfil();
-    </script>
+
+        sprawdzWypelnienie();
+    }
+
+    function sprawdzWypelnienie() {
+        document.getElementById('btn-zapisz').disabled = !(
+            document.getElementById('input-imie').value &&
+            document.getElementById('input-nazwisko').value &&
+            document.getElementById('input-wiek').value
+        );
+    }
+
+async function zapiszPacjenta() {
+    console.log("KLIKNIĘTO ZAPISZ PACJENTA");
+
+    const first_name = document.getElementById('input-imie').value.trim();
+    const last_name = document.getElementById('input-nazwisko').value.trim();
+    const age = parseInt(document.getElementById('input-wiek').value, 10);
+    const email = document.getElementById('gen-email').value;
+    const verification_code = document.getElementById('gen-kod').value;
+    const temporary_password = document.getElementById('gen-haslo').value;
+
+    console.log({
+        first_name,
+        last_name,
+        age,
+        email,
+        verification_code,
+        temporary_password
+    });
+
+    try {
+        const response = await fetch('http://localhost:3000/patients', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                first_name,
+                last_name,
+                age,
+                email,
+                verification_code,
+                temporary_password
+            })
+        });
+
+        const data = await response.json();
+        console.log("ODPOWIEDŹ Z BACKENDU:", data);
+
+        if (response.ok) {
+            alert("Pacjent zapisany w bazie! 🔥");
+            window.location.href = "strona po logowaniu.html";
+        } else {
+            alert("Błąd: " + data.message);
+        }
+
+    } catch (error) {
+        console.error("FETCH ERROR:", error);
+        alert("Brak połączenia z backendem ❌");
+    }
+}
+
+    function wczytajMotyw() {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    }
+
+    function wczytajProfil() {
+        const u = JSON.parse(localStorage.getItem("zalogowanyUzytkownik")) || {
+            imie: "Anna Kowalska",
+            inicjaly: "AK",
+            kolor: "#3b82f6"
+        };
+
+        document.getElementById("profil-imie").innerText = u.imie;
+        document.getElementById("profil-inicjaly").innerText = u.inicjaly;
+        document.getElementById("profil-inicjaly").style.backgroundColor = u.kolor;
+    }
+
+    function wyloguj() {
+        localStorage.removeItem("zalogowanyUzytkownik");
+        localStorage.removeItem("theme");
+       // window.location.href = "Strona logowania.html";
+    }
+
+    wczytajMotyw();
+    wczytajProfil();
+</script>
 </body>
 </html>
