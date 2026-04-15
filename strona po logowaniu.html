@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>LungCare+ Pacjenci</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -479,100 +480,230 @@
                 <span class="licznik-badge" id="licznik-pacjentow">0 pacjentów</span>
                 <div class="wyszukiwarka-wrapper">
                     <span class="material-symbols-outlined ikona-szukaj">search</span>
-                    <input type="text" id="input-szukaj" class="input-szukaj" placeholder="Szukaj (Nazwisko lub PESEL)..." onkeyup="filtrujPacjentow()">
+                    <input type="text" id="input-szukaj" class="input-szukaj" placeholder="Szukaj (Nazwisko)..." onkeyup="filtrujPacjentow()">
                 </div>
             </div>
         </header>
         <div class="kontener-tabeli">
             <div class="tabela-wrapper">
                 <table>
-                    <thead><tr><th>Pacjent</th><th>Wiek</th><th>Status</th><th>PESEL</th></tr></thead>
+                    <thead><tr><th>Pacjent</th><th>Wiek</th><th>Status</th></tr></thead>
                     <tbody id="tabela-body"></tbody>
                 </table>
             </div>
         </div>
     </main>
     <script>
-        const pacjenci = [
-            { id: 1, name: "Anna Nowak", age: 58, status: "Stabilny", pesel: "65022314567", alert: false },
-            { id: 2, name: "Bartosz Kowalczyk", age: 62, status: "Wymaga uwagi", pesel: "61081298765", alert: true },
-            { id: 3, name: "Ewa Wiśniewska", age: 55, status: "Stabilny", pesel: "68111223456", alert: false },
-            { id: 4, name: "Jan Lewandowski", age: 61, status: "Stabilny", pesel: "62042187654", alert: false },
-            { id: 5, name: "Katarzyna Wójcik", age: 54, status: "Wymaga uwagi", pesel: "69090534567", alert: true },
-            { id: 6, name: "Marek Kamiński", age: 63, status: "Krytyczny", pesel: "60031276543", alert: true },
-            { id: 7, name: "Piotr Zieliński", age: 59, status: "Stabilny", pesel: "64072198765", alert: false },
-            { id: 8, name: "Teresa Szymańska", age: 57, status: "Wymaga uwagi", pesel: "66101845678", alert: true },
-        ];
+       // ==============================
+// 1. KONFIGURACJA SUPABASE
+// ==============================
 
-        // ZADANIE 2: Funkcja sortująca pacjentów (Krytyczny > Wymaga uwagi > Stabilny)
-        function sortujPacjentow(lista) {
-            const wagi = {
-                "Krytyczny": 0,
-                "Wymaga uwagi": 1,
-                "Stabilny": 2
-            };
-            return lista.sort((a, b) => {
-                const wagaA = wagi[a.status] !== undefined ? wagi[a.status] : 99;
-                const wagaB = wagi[b.status] !== undefined ? wagi[b.status] : 99;
-                return wagaA - wagaB;
-            });
-        }
+const SUPABASE_URL="https://sdyggtoponysevmtygkj.supabase.co";
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkeWdndG9wb255c2V2bXR5Z2tqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NzEzNDAsImV4cCI6MjA4OTQ0NzM0MH0.j5r6TJFuXjfySKOUmbbjv1NvrxZQvc0-IThh5SnUJCc";
 
-        function renderujTabele(dane) {
-            // Najpierw posortuj dane
-            dane = sortujPacjentow(dane);
+// Tworzenie klienta Supabase (połączenie z bazą)
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            const tbody = document.getElementById('tabela-body');
-            tbody.innerHTML = '';
 
-            dane.forEach(p => {
-                let klasaWiersza = '', ikona = '';
-                if (p.status === 'Krytyczny' && p.alert) { klasaWiersza = 'wiersz-krytyczny'; ikona = `<span class="material-symbols-outlined ikona-alert alert-czerwony">error</span>`; }
-                else if (p.status === 'Wymaga uwagi' && p.alert) { klasaWiersza = 'wiersz-uwaga'; ikona = `<span class="material-symbols-outlined ikona-alert alert-pomaranczowy">error</span>`; }
+// ==============================
+// 2. ZMIENNA GLOBALNA
+// ==============================
 
-                let klasaStatusu = 'status-stabilny';
-                if (p.status === 'Wymaga uwagi') klasaStatusu = 'status-uwaga';
-                if (p.status === 'Krytyczny') klasaStatusu = 'status-krytyczny';
+// Tutaj pacjenci z bazy
+let pacjenci = [];
 
-                // ZADANIE 1: Dodanie onclick="kliknieciePacjenta(...)"
-                tbody.innerHTML += `
-                    <tr class="${klasaWiersza}" onclick="kliknieciePacjenta('${p.name}')">
-                        <td><div style="display:flex; align-items:center;">${ikona}${p.name}</div></td>
-                        <td>${p.age} lat</td>
-                        <td><span class="status-badge ${klasaStatusu}">${p.status}</span></td>
-                        <td>${p.pesel}</td>
-                    </tr>`;
-            });
-            document.getElementById('licznik-pacjentow').innerText = `${dane.length} pacjentów`;
-        }
 
-        function filtrujPacjentow() {
-            const fraza = document.getElementById('input-szukaj').value.toLowerCase();
-            const przefiltrowani = pacjenci.filter(p => p.name.toLowerCase().includes(fraza) || p.pesel.includes(fraza));
-            renderujTabele(przefiltrowani);
-        }
+// ==============================
+// 3. SORTOWANIE PACJENTÓW
+// ==============================
 
-        function wczytajMotyw() { if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode'); }
+// Funkcja ustawia kolejność:
+// Krytyczny -> Wymaga uwagi -> Stabilny
+function sortujPacjentow(lista) {
 
-        function wczytajProfil() {
-            const uzytkownik = JSON.parse(localStorage.getItem("zalogowanyUzytkownik")) || { imie: "Anna Kowalska", inicjaly: "AK", kolor: "#3b82f6" };
-            document.getElementById("profil-imie").innerText = uzytkownik.imie;
-            document.getElementById("profil-inicjaly").innerText = uzytkownik.inicjaly;
-            document.getElementById("profil-inicjaly").style.backgroundColor = uzytkownik.kolor;
-        }
+    // Wagi określają kolejność sortowania (im mniejsza liczba tym wyżej)
+    const wagi = {
+        "Krytyczny": 0,
+        "Wymaga uwagi": 1,
+        "Stabilny": 2
+    };
 
-        function wyloguj() {
-            localStorage.removeItem("zalogowanyUzytkownik");
-            localStorage.removeItem("theme");
-            window.location.href = "Strona logowania.html";
-        }
+    // Tworzymy nową posortowaną tablicę
+    return [...lista].sort((a, b) => {
+        const wagaA = wagi[a.status] ?? 99; // jeśli brak statusu → na koniec
+        const wagaB = wagi[b.status] ?? 99;
 
-        function kliknieciePacjenta(imie) {
-            const bezpieczneImie = encodeURIComponent(imie);
-            window.location.href = `szczegoly pacjenta.html?imie=${bezpieczneImie}`;
-        }
+        return wagaA - wagaB;
+    });
+}
 
-        wczytajMotyw(); wczytajProfil(); renderujTabele(pacjenci);
+
+// ==============================
+// 4. RENDEROWANIE TABELI
+// ==============================
+
+function renderujTabele(dane) {
+    const tbody = document.getElementById('tabela-body');
+    tbody.innerHTML = '';
+
+    const posortowane = sortujPacjentow(dane);
+
+    if (posortowane.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="3">Brak pacjentów</td>
+            </tr>
+        `;
+        document.getElementById('licznik-pacjentow').innerText = '0 pacjentów';
+        return;
+    }
+
+    posortowane.forEach(p => {
+        let klasaWiersza = '';
+        let ikona = '';
+
+        let klasaStatusu = 'status-stabilny';
+        if (p.status === 'Wymaga uwagi') klasaStatusu = 'status-uwaga';
+        if (p.status === 'Krytyczny') klasaStatusu = 'status-krytyczny';
+
+        tbody.innerHTML += `
+            <tr class="${klasaWiersza}" onclick="kliknieciePacjenta(${p.id})">
+                <td>
+                    <div style="display:flex; align-items:center;">
+                        ${ikona}
+                        ${p.name}
+                    </div>
+                </td>
+                <td>${p.age} lat</td>
+                <td>
+                    <span class="status-badge ${klasaStatusu}">${p.status}</span>
+                </td>
+            </tr>
+        `;
+    });
+
+    document.getElementById('licznik-pacjentow').innerText = `${posortowane.length} pacjentów`;
+}
+
+
+// ==============================
+// 5. FILTROWANIE (WYSZUKIWARKA)
+// ==============================
+
+function filtrujPacjentow() {
+
+    // Pobranie tekstu wpisanego w wyszukiwarce
+    const fraza = document.getElementById('input-szukaj').value.toLowerCase();
+
+    // Filtrowanie tylko po imieniu i nazwisku
+    const przefiltrowani = pacjenci.filter(p =>
+        p.name.toLowerCase().includes(fraza)
+    );
+
+    // Renderujemy tylko przefiltrowane wyniki
+    renderujTabele(przefiltrowani);
+}
+
+
+// ==============================
+// 6. POBIERANIE PACJENTÓW Z BAZY
+// ==============================
+
+async function pobierzPacjentowZBazy() {
+    const { data, error } = await supabaseClient
+        .from('patients')
+        .select('*')
+        .order('id', { ascending: false });
+
+    if (error) {
+        console.error('Błąd pobierania pacjentów z bazy:', error);
+        alert('Nie udało się pobrać pacjentów z bazy. Sprawdź konsolę.');
+        return;
+    }
+
+    console.log('Dane z Supabase:', data);
+
+    pacjenci = data.map(p => ({
+        id: p.id,
+        name: `${p.first_name || ''} ${p.last_name || ''}`.trim(),
+        age: p.age ?? '-',
+        status: 'Stabilny'
+    }));
+
+    renderujTabele(pacjenci);
+}
+
+
+// ==============================
+// 7. NAWIGACJA DO SZCZEGÓŁÓW
+// ==============================
+
+function kliknieciePacjenta(id) {
+
+    // Przekazujemy ID pacjenta w URL
+    window.location.href = `szczegoly pacjenta.html?id=${id}`;
+}
+
+
+// ==============================
+// 8. MOTYW (LIGHT/DARK)
+// ==============================
+
+function wczytajMotyw() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+}
+
+
+// ==============================
+// 9. PROFIL UŻYTKOWNIKA
+// ==============================
+
+function wczytajProfil() {
+
+    // Pobranie danych użytkownika z localStorage
+    const uzytkownik = JSON.parse(localStorage.getItem("zalogowanyUzytkownik")) || {
+        imie: "Anna Kowalska",
+        inicjaly: "AK",
+        kolor: "#3b82f6"
+    };
+
+    // Ustawienie danych w UI
+    document.getElementById("profil-imie").innerText = uzytkownik.imie;
+    document.getElementById("profil-inicjaly").innerText = uzytkownik.inicjaly;
+    document.getElementById("profil-inicjaly").style.backgroundColor = uzytkownik.kolor;
+}
+
+
+// ==============================
+// 10. WYLOGOWANIE
+// ==============================
+
+function wyloguj() {
+
+    // Usunięcie danych z localStorage
+    localStorage.removeItem("zalogowanyUzytkownik");
+    localStorage.removeItem("theme");
+
+    // Przekierowanie na stronę logowania
+    window.location.href = "Strona logowania.html";
+}
+
+
+// ==============================
+// 11. START STRONY
+// ==============================
+
+window.addEventListener('DOMContentLoaded', async () => {
+
+    // Załadowanie motywu i profilu
+    wczytajMotyw();
+    wczytajProfil();
+
+    // Pobranie pacjentów z bazy
+    await pobierzPacjentowZBazy();
+});
     </script>
 </body>
 </html>

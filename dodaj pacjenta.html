@@ -513,7 +513,7 @@ async function zapiszPacjenta() {
         console.log("ODPOWIEDŹ Z BACKENDU:", data);
 
         if (response.ok) {
-            alert("Pacjent zapisany w bazie! 🔥");
+            alert("Pacjent zapisany w bazie! ");
             window.location.href = "strona po logowaniu.html";
         } else {
             alert("Błąd: " + data.message);
