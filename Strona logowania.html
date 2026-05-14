@@ -214,22 +214,110 @@
         </div>
     </div>
     <div class="stopka-strony">© 2025 LungCare+ | Wersja Demo 1</div>
-    <script>
-        function pokazUkryjHaslo() {
-            const input = document.getElementById('password');
-            const ikona = document.getElementById('ikona-oka');
-            if (input.type === "password") { input.type = "text"; ikona.innerText = "visibility_off"; } else { input.type = "password"; ikona.innerText = "visibility"; }
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+
+    // ==============================
+    // 1. KONFIGURACJA SUPABASE
+    // ==============================
+
+    const SUPABASE_URL = "TUTAJ_WKLEJ_URL";
+    const SUPABASE_ANON_KEY = "TUTAJ_WKLEJ_ANON_KEY";
+
+    // Połączenie z Supabase
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+    // ==============================
+    // 2. POKAŻ / UKRYJ HASŁO
+    // ==============================
+
+    function pokazUkryjHaslo() {
+
+        const input = document.getElementById('password');
+        const ikona = document.getElementById('ikona-oka');
+
+        if (input.type === "password") {
+
+            input.type = "text";
+            ikona.innerText = "visibility_off";
+
+        } else {
+
+            input.type = "password";
+            ikona.innerText = "visibility";
         }
-        function obslugaLogowania(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const haslo = document.getElementById('password').value;
-            if (email && haslo) {
-                const uzytkownik = { imie: "Anna Kowalska", rola: "Lekarz Specjalista", inicjaly: "AK", kolor: "#2563eb", email: email };
-                localStorage.setItem("zalogowanyUzytkownik", JSON.stringify(uzytkownik));
-                window.location.href = "strona po logowaniu.html";
-            }
+    }
+
+
+    // ==============================
+    // 3. OBSŁUGA LOGOWANIA
+    // ==============================
+
+    async function obslugaLogowania(e) {
+
+        e.preventDefault();
+
+        // Pobranie danych z inputów
+        const email = document.getElementById('email').value;
+        const haslo = document.getElementById('password').value;
+
+
+        // ==============================
+        // 4. LOGOWANIE SUPABASE
+        // ==============================
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+            password: haslo
+
+        });
+
+
+        // ==============================
+        // 5. JEŻELI BŁĄD
+        // ==============================
+
+        if (error) {
+
+            alert("Niepoprawny email lub hasło");
+            console.log(error);
+
+            return;
         }
-    </script>
+
+
+        // ==============================
+        // 6. JEŻELI LOGOWANIE OK
+        // ==============================
+
+        if (data.user) {
+
+            // Dane lekarza zapisujemy lokalnie
+            const uzytkownik = {
+
+                email: data.user.email,
+                rola: "Lekarz",
+                imie: "Lekarz"
+
+            };
+
+            localStorage.setItem(
+                "zalogowanyUzytkownik",
+                JSON.stringify(uzytkownik)
+            );
+
+
+            // Przejście dalej
+            window.location.href = "strona po logowaniu.html";
+        }
+    }
+
+</script>
 </body>
 </html>
